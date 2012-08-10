@@ -3,20 +3,33 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+LD_LIBRARY_PATH='/usr/local/lib'
+GDAL_LIBRARY_PATH = '/usr/local/lib/libgdal.so'
+GDAL_DATA = '/usr/local/share/'
+GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
+PROJ_LIB='/usr/local/share/proj'
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
 
+DATABASE_ENGINE='django.contrib.gis.db.backends.postgis'
+DATABASE_NAME = ''
+DATABASE_USER = ''
+DATABASE_PASSWORD = ''
+DATABASE_HOST = ''
+DATABASE_PORT = ''
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': DATABASE_ENGINE, #'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': DATABASE_NAME,                      # Or path to database file if using sqlite3.
+        'USER': DATABASE_USER,                      # Not used with sqlite3.
+        'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
+        'HOST': DATABASE_HOST,                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -151,3 +164,13 @@ LOGGING = {
         },
     }
 }
+
+# Use local settings
+try:
+    LOCAL_SETTINGS
+except NameError:
+    try:
+        from local_settings import *
+    except ImportError:
+        pass
+
