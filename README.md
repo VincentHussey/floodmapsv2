@@ -1,4 +1,8 @@
 floodmapsv2
 ===========
 
-Replacement floodmaps websitepip install -r requirements.txt
+Replacement floodmaps website
+
+Installation
+
+pip install -r requirements.txt
