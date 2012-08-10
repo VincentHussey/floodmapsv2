@@ -1,4 +1,11 @@
 # Django settings for floodmapsv2 project.
+import os
+import django
+import sys
+PROJECT_ROOT = os.path.dirname(__file__)
+sys.path.insert(0, os.path.join(PROJECT_ROOT))
+DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -16,9 +23,9 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE='django.contrib.gis.db.backends.postgis'
-DATABASE_NAME = ''
-DATABASE_USER = ''
-DATABASE_PASSWORD = ''
+DATABASE_NAME = 'floodmaps'
+DATABASE_USER = 'flood'
+DATABASE_PASSWORD = 'flood'
 DATABASE_HOST = ''
 DATABASE_PORT = ''
 
@@ -134,6 +141,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'south',
     #'photologue',
+    'floodmaps',
 )
 
 # A sample logging configuration. The only tangible logging
