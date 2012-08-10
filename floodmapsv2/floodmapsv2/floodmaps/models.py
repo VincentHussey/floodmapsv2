@@ -21,6 +21,26 @@ from django.contrib.gis.db import models
 
 
 
+# predictive flood risk grid?
+
+
+
+# predictive flood depth grid
+
+
+
+# predictive flood velocity grid
+
+
+
+# Flood defences
+# defended areas
+
+
+
+# drainage schemes
+
+
 
 # Media
 # photographs
