@@ -3,6 +3,62 @@ from django.contrib.gis.db import models
 
 # Create your models here.
 
+# lookup tables
+# class ReportType(models.Model):
+
+# class DataSource(models.Model):
+
+# class FloodCause(models.Model):
+
+# class FloodRecordType(models.Model):
+
+# class FloodSourceType(models.Model):
+
+# class ReportInterpretation(models.Model):
+
+# class FloodInterpretation(models.Model):
+
+# Media
+# photographs
+
+
+# scanned images
+
+
+# uploaded files
+
+
+# videos
+
+
+# reports
+class Report(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=300)
+    #report_type_id = models.ForeignKey(ReportType) # Foreign key
+    report_date = models.DateTimeField()
+    file_name = models.FielField(upload_to=None,max_length=200)
+
+    # other fields from FHM system
+
+    #directory_location
+    #report_source_id
+    #entered_by_id
+    #entered_date
+    #available_on_web
+    #owner_id
+    #owner_department
+    #local_archive_refid
+    #information_source
+    #scan_status_id
+    #department_id
+    #defence_asset_info
+    #predictive_map_info
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
+
 # Historic Floods
 # historic flood points
 class HistoricFlood(models.Model):
@@ -79,64 +135,4 @@ class HistoricFlood(models.Model):
 
 
 
-# Media
-# photographs
 
-
-# scanned images
-
-
-# uploaded files
-
-
-# videos
-
-
-# reports
-class Report(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.CharField(max_length=300)
-    #report_type_id = models.ForeignKey(ReportType) # Foreign key
-    report_date = models.DateTimeField()
-    file_name = models.FielField(upload_to=None,max_length=200)
-
-    # other fields from FHM system
- 
-    #directory_location
-    #report_source_id
-    #entered_by_id
-    #entered_date
-    #available_on_web
-    #owner_id
-    #owner_department
-    #local_archive_refid
-    #information_source
-    #scan_status_id
-    #department_id
-    #defence_asset_info
-    #predictive_map_info
-
-    # Returns the string representation of the model.
-    def __unicode__(self):
-        return '%s' % (self.name)
-
-# lookup tables
-# class ReportType(models.Model):
-
-# class DataSource(models.Model):
-
-# class FloodCause(models.Model):
-
-# class FloodRecordType(models.Model):
-
-# class FloodSourceType(models.Model):
-
-# class ReportInterpretation(models.Model):
-
-# class FloodInterpretation(models.Model):
-
-# class QualityCode(models.Model):
-
-# class ApprovalStatus(models.Model):
-
-# class DataSourceDepartment(models.Model):
