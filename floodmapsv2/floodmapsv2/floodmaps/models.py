@@ -1,6 +1,9 @@
 #from django.db import models
 from django.contrib.gis.db import models
 
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules([], ["^django\.contrib\.gis"])
+
 # Create your models here.
 
 # lookup tables
@@ -25,8 +28,6 @@ from django.contrib.gis.db import models
 # scanned images
 
 
-# uploaded files
-
 
 # videos
 
@@ -37,7 +38,7 @@ class Report(models.Model):
     description = models.CharField(max_length=300)
     #report_type_id = models.ForeignKey(ReportType) # Foreign key
     report_date = models.DateTimeField()
-    file_name = models.FielField(upload_to=None,max_length=200)
+    file_name = models.FileField(upload_to='report/%Y/%m/%d/',max_length=200)
 
     # other fields from FHM system
 
