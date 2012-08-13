@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'south',
     #'photologue',
     'floodmaps',
+    'geography',
 )
 
 # A sample logging configuration. The only tangible logging
