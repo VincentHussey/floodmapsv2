@@ -40,7 +40,7 @@ class HistoricFlood(models.Model):
     #tmp_ftr_typ
     #flood_record_type_id
 
-# Returns the string representation of the model.
+    # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
 
@@ -115,3 +115,28 @@ class Report(models.Model):
     #department_id
     #defence_asset_info
     #predictive_map_info
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
+
+# lookup tables
+# class ReportType(models.Model):
+
+# class DataSource(models.Model):
+
+# class FloodCause(models.Model):
+
+# class FloodRecordType(models.Model):
+
+# class FloodSourceType(models.Model):
+
+# class ReportInterpretation(models.Model):
+
+# class FloodInterpretation(models.Model):
+
+# class QualityCode(models.Model):
+
+# class ApprovalStatus(models.Model):
+
+# class DataSourceDepartment(models.Model):
