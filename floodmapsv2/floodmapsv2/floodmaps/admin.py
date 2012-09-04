@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib.gis import admin
 from floodmaps.models import *
 
 admin.site.register(Glossary)
