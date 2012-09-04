@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     # url(r'^floodmapsv2/', include('floodmapsv2.foo.urls')),
 
     # urls for apps
-    url(r'^$',include('floodmapsv2.floodmaps.urls')),
+    #url(r'^$',include('floodmapsv2.floodmaps.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

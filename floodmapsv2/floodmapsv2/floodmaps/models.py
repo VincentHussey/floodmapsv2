@@ -98,8 +98,13 @@ class ApprovalStatus(models.Model):
     def __unicode__(self):
         return '%s' % (self.name)
 
-class ReportType(models.Model):
+class FloodRecordType(models.Model):
     name = models.CharField(max_length=50)
+    description = models.CharField(max_length=200,null=True,blank=True)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
     
 
 # Media
@@ -155,6 +160,7 @@ class HistoricFlood(models.Model):
     cause = models.ManyToManyField(FloodCause, through='FloodCauseLink')
     #address = models.ForeignKey(FloodAddress) # needs a bit of though on implementation ?
     group = models.ManyToManyField('FloodGroup', null=True, blank=True)
+    flood_record_type = models.ForeignKey(FloodRecordType)
 
     # geometry
     geometry = models.PointField(srid=2147)
@@ -180,7 +186,6 @@ class HistoricFlood(models.Model):
     #severity_index
     #geographical_quality_id
     #tmp_ftr_typ
-    #flood_record_type_id
 
     # Returns the string representation of the model.
     def __unicode__(self):
