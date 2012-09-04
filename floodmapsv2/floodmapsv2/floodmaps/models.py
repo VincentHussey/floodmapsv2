@@ -4,22 +4,103 @@ from django.contrib.gis.db import models
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^django\.contrib\.gis"])
 
-# Create your models here.
+# glossary
+class GlossaryCategory(models.Model):
+   name = models.CharField(max_length=50)
+
+   # Returns the string representation of the model.
+   def __unicode__(self):
+       return '%s' % (self.name)
+
+class Glossary(models.Model):
+    category = models.ForeignKey(GlossaryCategory)
+    term = models.CharField(max_length=100)
+    description = models.CharField(max_length=2000)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
 
 # lookup tables
-# class ReportType(models.Model):
+class ReportType(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=100,null=True,blank=True)
+    initial = models.CharField(max_length=2)
+    default_extension = models.CharField(max_length=4,null=True,blank=True)
+    default_folder = models.CharField(max_length=100,null=True,blank=True)
+    #default_extent 
+    #default_level
+    #default_depth
+    #default_velocity
+    #default_flow
+    #default_frequency
+    #default_financialdamage
+    #default_source
+    #default_cause
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
 
-# class DataSource(models.Model):
+class DataSource(models.Model):
+   name = models.CharField(max_length=50)
+   description = models.CharField(max_length=50,null=True,blank=True)
+   initial = models.CharField(max_length=5)
+   default_folder = models.CharField(max_length=100)
 
-# class FloodCause(models.Model):
+   # Returns the string representation of the model.
+   def __unicode__(self):
+       return '%s' % (self.name) 
 
-# class FloodRecordType(models.Model):
+class FloodCause(models.Model):
+   name = models.CharField(max_length=50)
+   description = models.CharField(max_length=100,null=True,blank=True)
 
-# class FloodSourceType(models.Model):
+   # Returns the string representation of the model.
+   def __unicode__(self):
+       return '%s' % (self.name)
 
-# class ReportInterpretation(models.Model):
+class FloodRecordType(models.Model):
+   name = models.CharField(max_length=50)
+   description = models.CharField(max_length=100,null=True,blank=True)
 
-# class FloodInterpretation(models.Model):
+   # Returns the string representation of the model.
+   def __unicode__(self):
+       return '%s' % (self.name)
+
+class FloodSourceType(models.Model):
+   name = models.CharField(max_length=50)
+   description = models.CharField(max_length=100,null=True,blank=True)
+
+   # Returns the string representation of the model.
+   def __unicode__(self):
+       return '%s' % (self.name)
+
+class QualityCode(models.Model):
+    name = models.CharField(max_length=20)
+    description = models.CharField(max_length=40,null=True,blank=True)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
+
+class InterpretationStage(models.Model):
+    name = models.CharField(max_length=40)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
+
+class ApprovalStatus(models.Model):
+    name = models.CharField(max_length=20)
+    description = models.CharField(max_length=200,null=True,blank=True)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
+
+class ReportType(models.Model):
+    name = models.CharField(max_length=50)
+    
 
 # Media
 # photographs
@@ -36,7 +117,7 @@ add_introspection_rules([], ["^django\.contrib\.gis"])
 class Report(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=300)
-    #report_type_id = models.ForeignKey(ReportType) # Foreign key
+    report_type = models.ForeignKey(ReportType,null=True) # Foreign key
     report_date = models.DateTimeField()
     file_name = models.FileField(upload_to='report/%Y/%m/%d/',max_length=200)
 
@@ -69,7 +150,11 @@ class HistoricFlood(models.Model):
     notes = models.TextField()
 
     # link to report from floods - floods fields have been split by geometry and type.
-    report = models.ManyToManyField(Report)
+    report = models.ManyToManyField(Report) # through field?
+
+    cause = models.ManyToManyField(FloodCause, through='FloodCauseLink')
+    #address = models.ForeignKey(FloodAddress) # needs a bit of though on implementation ?
+    group = models.ManyToManyField('FloodGroup', null=True, blank=True)
 
     # geometry
     geometry = models.PointField(srid=2147)
@@ -81,7 +166,7 @@ class HistoricFlood(models.Model):
     #source_lake_id
     #source_coastal_water_id
     #source_other
-    #number_properties_flodded
+    #number_properties_flooded
     #financial_damage
     #catchment_id
     #peak_date_time
@@ -103,6 +188,92 @@ class HistoricFlood(models.Model):
 
 # historic flood polygons
 
+
+class ReportInterpretation(models.Model):
+    report = models.ForeignKey(Report)
+    quality_code = models.ForeignKey(QualityCode)
+    interpretation_stage = models.ForeignKey(InterpretationStage)
+    stage_date = models.DateTimeField()
+    #first_person
+    justification = models.CharField(max_length=200) 
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
+
+
+class HistoricFloodInterpretation(models.Model):
+    flood = models.ForeignKey(HistoricFlood)    
+    quality_code = models.ForeignKey(QualityCode)
+    #interpretation_stage    
+    stage_date = models.DateTimeField()
+    #first_person
+    justification = models.CharField(max_length=200)
+    #approver
+    
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.flood)
+
+class FloodAddress(models.Model):
+    flood = models.ForeignKey(HistoricFlood)
+    report = models.ForeignKey(Report,null=True,blank=True)
+    #townland
+    #town
+    #county
+    #name
+    #building_number
+    #street
+    
+class ReportAddress(models.Model):
+    report = models.ForeignKey(Report)
+    #townland
+    #town
+    #county
+    #name
+    #building_number
+    #street
+
+class FloodCauseLink(models.Model):
+    flood = models.ForeignKey(HistoricFlood)
+    cause = models.ForeignKey(FloodCause)
+    report = models.ForeignKey(Report,null=True,blank=True)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.cause)
+
+class FloodReportLink(models.Model):
+    flood = models.ForeignKey(HistoricFlood)
+    report = models.ForeignKey(Report,null=True,blank=True)
+    #extent
+    #level
+    #depth
+    #velocity
+    #flow
+    #frequency
+    #number_properties_damaged
+    #financial_damage_caused
+    #source
+    #cause
+    #entered_by
+    #completed
+
+class FloodGroupType(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=255,null=True,blank=True)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
+
+class FloodGroup(models.Model):
+    type = models.ForeignKey(FloodGroupType)
+    description = models.CharField(max_length=255,null=True,blank=True)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
 
 # Indicative Floods
 # indicative flood polygons
