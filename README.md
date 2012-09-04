@@ -5,11 +5,7 @@ Replacement floodmaps website
 
 # Installation
 # On Debian or Ubuntu (e.g. turnkeylinux core VM)
-apt-get install postgresql
-apt-get install python-setuptools
-apt-get install python-virtualenv
-apt-get install libapache2-mod-wsgi
-apt-get install libpg-dev python-dev
+apt-get install postgresql python-setuptools python-virtualenv libapache2-mod-wsgi libpg-dev python-dev gcc
 
 # Create a folder to hold the application
 mkdir -p /opt/
