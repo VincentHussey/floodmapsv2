@@ -160,7 +160,7 @@ class HistoricFlood(models.Model):
     cause = models.ManyToManyField(FloodCause, through='FloodCauseLink')
     #address = models.ForeignKey(FloodAddress) # needs a bit of though on implementation ?
     group = models.ManyToManyField('FloodGroup', null=True, blank=True)
-    flood_record_type = models.ForeignKey(FloodRecordType)
+    flood_record_type = models.ForeignKey(FloodRecordType,null=True)
 
     # geometry
     geometry = models.PointField(srid=2147)
