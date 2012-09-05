@@ -5,7 +5,7 @@ Replacement floodmaps website
 
 # Installation
 # On Debian or Ubuntu (e.g. turnkeylinux core VM)
-apt-get install postgresql python-setuptools python-virtualenv libapache2-mod-wsgi libpg-dev python-dev gcc postgis postgresql-8.4-postgis
+apt-get install postgresql python-setuptools python-virtualenv libapache2-mod-wsgi libpg-dev python-dev gcc postgis postgresql-8.4-postgis libproj0 libproj-dev gdal-bin libgdal1-dev libgeos-dev
 
 # Create a folder to hold the application
 mkdir -p /opt/
