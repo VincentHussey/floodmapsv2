@@ -5,7 +5,7 @@ Replacement floodmaps website
 
 # Installation
 ## On Debian or Ubuntu (e.g. turnkeylinux core VM)
-apt-get install postgresql python-setuptools python-virtualenv libapache2-mod-wsgi libpg-dev python-dev gcc postgis postgresql-8.4-postgis libproj0 libproj-dev gdal-bin libgdal1-dev libgeos-dev
+apt-get install apt-utils postgresql python-setuptools python-virtualenv libapache2-mod-wsgi libpq-dev python-dev gcc postgis postgresql-8.4-postgis libproj0 libproj-dev gdal-bin libgdal1-dev libgeos-dev proj-bin
 
 ## Create a folder to hold the application
 mkdir -p /opt/
@@ -19,7 +19,7 @@ cd /opt/floodmapsv2
 virtualenv env
 
 ## Database configuration
-It may be necessary to reinitialise the database using UTF8 encoding.
+It may be necessary to reinitialise the database using UTF8 encoding (pg_dropcluster --stop 8.4 main).
 It may be necessary to modify pg_hba.conf
 
 # Run in a virtual environment
@@ -30,9 +30,13 @@ pip install -r requirements.txt
 
 # Create the database
 (modify as necessary)
+
 su postgres
+
 cd /opt/floodmapsv2/utils
+
 ./create_database_debian.sh
+
 Enter password for user flood twice
 
 # Check settings and locations for gdal, geos & proj
@@ -43,5 +47,7 @@ It may be necessary to set the locale e.g dpkg-reconfigure locales & choose en_U
 ref. https://code.djangoproject.com/ticket/16017
 
 cd /opt/floodmapsv2/floodmapsv2/floodmapsv2/
+
 ../manage.py syncdb
+
 ../manage.py migrate floodmaps
