@@ -11,6 +11,9 @@ class GlossaryCategory(models.Model):
    # Returns the string representation of the model.
    def __unicode__(self):
        return '%s' % (self.name)
+   class Meta:
+       ordering = ['name']
+       verbose_name_plural = 'glossary categories'
 
 class Glossary(models.Model):
     category = models.ForeignKey(GlossaryCategory)
@@ -20,6 +23,9 @@ class Glossary(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['category','term']
+        verbose_name_plural = 'glossary entries'
 
 # lookup tables
 class ReportType(models.Model):
@@ -40,6 +46,8 @@ class ReportType(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
 
 class DataSource(models.Model):
    name = models.CharField(max_length=50)
@@ -50,6 +58,8 @@ class DataSource(models.Model):
    # Returns the string representation of the model.
    def __unicode__(self):
        return '%s' % (self.name) 
+   class Meta:
+       ordering = ['name']
 
 class FloodCause(models.Model):
    name = models.CharField(max_length=50)
@@ -58,6 +68,8 @@ class FloodCause(models.Model):
    # Returns the string representation of the model.
    def __unicode__(self):
        return '%s' % (self.name)
+   class Meta:
+       ordering = ['name']
 
 class FloodRecordType(models.Model):
    name = models.CharField(max_length=50)
@@ -66,6 +78,8 @@ class FloodRecordType(models.Model):
    # Returns the string representation of the model.
    def __unicode__(self):
        return '%s' % (self.name)
+   class Meta:
+       ordering = ['name']
 
 class FloodSourceType(models.Model):
    name = models.CharField(max_length=50)
@@ -74,6 +88,8 @@ class FloodSourceType(models.Model):
    # Returns the string representation of the model.
    def __unicode__(self):
        return '%s' % (self.name)
+   class Meta:
+       ordering = ['name']
 
 class QualityCode(models.Model):
     name = models.CharField(max_length=20)
@@ -82,6 +98,8 @@ class QualityCode(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
 
 class InterpretationStage(models.Model):
     name = models.CharField(max_length=40)
@@ -89,6 +107,8 @@ class InterpretationStage(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
 
 class ApprovalStatus(models.Model):
     name = models.CharField(max_length=20)
@@ -97,6 +117,9 @@ class ApprovalStatus(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = 'approval statuses'
 
 class FloodRecordType(models.Model):
     name = models.CharField(max_length=50)
@@ -105,6 +128,8 @@ class FloodRecordType(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
     
 
 # Media
@@ -190,6 +215,8 @@ class HistoricFlood(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
 
 # historic flood polygons
 
@@ -205,6 +232,8 @@ class ReportInterpretation(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['report']
 
 
 class HistoricFloodInterpretation(models.Model):
@@ -219,6 +248,8 @@ class HistoricFloodInterpretation(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.flood)
+    class Meta:
+        ordering = ['flood']
 
 class FloodAddress(models.Model):
     flood = models.ForeignKey(HistoricFlood)
@@ -229,7 +260,10 @@ class FloodAddress(models.Model):
     #name
     #building_number
     #street
-    
+    class Meta:
+        ordering = ['flood']
+        verbose_name_plural = 'flood addresses'
+
 class ReportAddress(models.Model):
     report = models.ForeignKey(Report)
     #townland
@@ -238,6 +272,9 @@ class ReportAddress(models.Model):
     #name
     #building_number
     #street
+    class Meta:
+        ordering = ['report']
+        verbose_name_plural = 'report addresses'
 
 class FloodCauseLink(models.Model):
     flood = models.ForeignKey(HistoricFlood)
@@ -271,6 +308,8 @@ class FloodGroupType(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
 
 class FloodGroup(models.Model):
     type = models.ForeignKey(FloodGroupType)
@@ -279,6 +318,8 @@ class FloodGroup(models.Model):
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
+    class Meta:
+        ordering = ['type']
 
 # Indicative Floods
 # indicative flood polygons
