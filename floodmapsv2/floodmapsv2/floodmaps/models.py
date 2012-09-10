@@ -119,7 +119,7 @@ class ApprovalStatus(models.Model):
         return '%s' % (self.name)
     class Meta:
         ordering = ['name']
-        verbose_name_plural = 'approval statuses'
+        verbose_name_plural = 'approval status'
 
 class FloodRecordType(models.Model):
     name = models.CharField(max_length=50)
