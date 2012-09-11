@@ -43,7 +43,12 @@ Enter password for user flood twice
 find / -name "proj"
 
 # Create tables and synchronise the database
-It may be necessary to set the locale e.g dpkg-reconfigure locales & choose en_US.UTF-8, en_GB.UTF-8, en_IE.UTF-8 
+It may be necessary to set the locale e.g 
+
+dpkg-reconfigure locales & choose en_US.UTF-8, en_GB.UTF-8, en_IE.UTF-8 
+
+LC_ALL=en_US.UTF-8;export LC_ALL
+
 ref. https://code.djangoproject.com/ticket/16017
 
 cd /opt/floodmapsv2/floodmapsv2/floodmapsv2/

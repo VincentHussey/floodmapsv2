@@ -22,7 +22,7 @@ class Glossary(models.Model):
 
     # Returns the string representation of the model.
     def __unicode__(self):
-        return '%s' % (self.name)
+        return '%s' % (self.term)
     class Meta:
         ordering = ['category','term']
         verbose_name_plural = 'glossary entries'

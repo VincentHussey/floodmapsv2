@@ -2,6 +2,7 @@ from django.contrib.gis import admin
 from floodmaps.models import *
 
 admin.site.register(Glossary)
+admin.site.register(GlossaryCategory)
 admin.site.register(ReportType)
 admin.site.register(DataSource)
 admin.site.register(FloodCause)
