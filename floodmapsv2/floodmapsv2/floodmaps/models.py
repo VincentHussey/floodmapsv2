@@ -188,7 +188,7 @@ class HistoricFlood(models.Model):
     flood_record_type = models.ForeignKey(FloodRecordType,null=True)
 
     # geometry
-    geometry = models.PointField(srid=2147)
+    geometry = models.PointField(srid=2157)
     objects = models.GeoManager() 
 
 # other fields in FHM system
