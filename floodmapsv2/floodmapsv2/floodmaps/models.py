@@ -1,5 +1,6 @@
 #from django.db import models
 from django.contrib.gis.db import models
+from geography.models import *
 
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^django\.contrib\.gis"])
@@ -130,7 +131,17 @@ class FloodRecordType(models.Model):
         return '%s' % (self.name)
     class Meta:
         ordering = ['name']
-    
+
+class GeographicalQuality(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=200,null=True,blank=True)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = 'geographical quality'
 
 # Media
 # photographs
@@ -183,34 +194,49 @@ class HistoricFlood(models.Model):
     report = models.ManyToManyField(Report) # through field?
 
     cause = models.ManyToManyField(FloodCause, through='FloodCauseLink')
-    #address = models.ForeignKey(FloodAddress) # needs a bit of though on implementation ?
+    #address = models.ForeignKey(FloodAddress) # needs a bit of thought on implementation ?
     group = models.ManyToManyField('FloodGroup', null=True, blank=True)
-    flood_record_type = models.ForeignKey(FloodRecordType,null=True)
+    flood_record_type = models.ForeignKey(FloodRecordType,null=True, blank=True)
+    style = models.CharField(max_length=255,null=True, blank=True)
 
     # geometry
     geometry = models.PointField(srid=2157)
     objects = models.GeoManager() 
 
 # other fields in FHM system
-    #source_type_id
-    #source_river_id
-    #source_lake_id
-    #source_coastal_water_id
-    #source_other
+    source_type = models.ForeignKey(FloodSourceType, null=True, blank=True)
+    source_river = models.ForeignKey(River, null=True, blank=True)
+    source_lake = models.ForeignKey(Lake, null=True, blank=True)
+    source_coastal_water = models.ForeignKey(CoastalWater, null=True, blank=True)
+    source_other = models.CharField(max_length=40,null=True, blank=True)
     #number_properties_flooded
     #financial_damage
-    #catchment_id
-    #peak_date_time
+    catchment = models.ForeignKey(Catchment,null=True, blank=True)
+    peak_datetime = models.DateTimeField(null=True, blank=True)
     #peak_level
     #peak_depth
     #peak_velocity
     #frequency
-    #alleviation_scheme
+    alleviation_scheme = models.BooleanField(default=False)
+    scheme_description = models.CharField(max_length=200,null=True, blank=True)
     #peak_flow
-    #scheme_description
-    #severity_index
-    #geographical_quality_id
+    severity_index = models.FloatField(default=0.0)
+    geographical_quality = models.ForeignKey(GeographicalQuality, null=True, blank=True)
     #tmp_ftr_typ
+
+    # checks
+    mapping_checked = models.BooleanField(default=False)
+    #mapping_checked_by = 
+    mapping_checked_date = models.DateTimeField(null=True, blank=True)
+    #flood_creator = 
+
+    # source reports
+    #start_source = models.ForeignKey(Report, null=True, blank=True)
+    #peak_source = models.ForeignKey(Report, null=True, blank=True)
+    #end_source = models.ForeignKey(Report, null=True, blank=True)
+    #map_source = models.ForeignKey(Report, null=True, blank=True)
+    #source_type_source = models.ForeignKey(Report, null=True, blank=True)
+    #source_report = models.ForeignKey(Report, null=True, blank=True)
 
     # Returns the string representation of the model.
     def __unicode__(self):
@@ -254,24 +280,38 @@ class HistoricFloodInterpretation(models.Model):
 class FloodAddress(models.Model):
     flood = models.ForeignKey(HistoricFlood)
     report = models.ForeignKey(Report,null=True,blank=True)
-    #townland
-    #town
-    #county
-    #name
-    #building_number
-    #street
+    townland = models.ForeignKey(Townland,null=True,blank=True)
+    town = models.ForeignKey(Town ,null=True,blank=True)
+    county = models.ForeignKey(County, null=True,blank=True)
+    name = models.CharField(max_length=50, null=True,blank=True)
+    building_number = models.IntegerField(null=True,blank=True)
+    street = models.CharField(max_length=50, null=True,blank=True)
+    easting = models.FloatField(null=True,blank=True)
+    northing = models.FloatField(null=True,blank=True)
+    grid_reference = models.CharField(max_length=15, null=True,blank=True)
+
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.flood)
     class Meta:
         ordering = ['flood']
         verbose_name_plural = 'flood addresses'
 
 class ReportAddress(models.Model):
     report = models.ForeignKey(Report)
-    #townland
-    #town
-    #county
-    #name
-    #building_number
-    #street
+    townland = models.ForeignKey(Townland,null=True,blank=True)
+    town = models.ForeignKey(Town ,null=True,blank=True)
+    county = models.ForeignKey(County, null=True,blank=True)
+    name = models.CharField(max_length=50, null=True,blank=True)
+    building_number = models.IntegerField(null=True,blank=True)
+    street = models.CharField(max_length=50, null=True,blank=True)
+    easting = models.FloatField(null=True,blank=True)
+    northing = models.FloatField(null=True,blank=True)
+    grid_reference = models.CharField(max_length=15, null=True,blank=True)
+    
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.report)
     class Meta:
         ordering = ['report']
         verbose_name_plural = 'report addresses'
