@@ -5,7 +5,7 @@ import sys
 PROJECT_ROOT = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(PROJECT_ROOT))
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
-SITE_ROOT = '/opt/projects/floodmapsv2/' 
+SITE_ROOT = os.path.abspath('../..')
 
 #SITE_URL='http://localhost/floodmapsv2'
 
@@ -139,6 +139,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    # GIS / GeoDjango
+    'django.contrib.gis',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'south',
