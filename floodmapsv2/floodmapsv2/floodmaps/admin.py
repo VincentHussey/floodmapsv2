@@ -1,5 +1,5 @@
 from django.contrib.gis import admin
-from floodmaps.models import *
+from floodmaps.models import * 
 
 class MyGeoAdmin(admin.OSMGeoAdmin): # uses WebMercator
 	default_lon = -884000 #-8.5 #degrees W
@@ -14,6 +14,8 @@ class MyGeoAdmin(admin.OSMGeoAdmin): # uses WebMercator
 
 admin.site.register(Glossary)
 admin.site.register(GlossaryCategory)
+
+# Historic Flood
 admin.site.register(ReportType)
 admin.site.register(DataSource)
 admin.site.register(FloodCause)
@@ -30,6 +32,9 @@ admin.site.register(FloodAddress)
 admin.site.register(ReportAddress)
 admin.site.register(FloodGroupType)
 admin.site.register(FloodGroup)
+
+
+
 #admin.site.register()
 
 

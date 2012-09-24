@@ -147,6 +147,9 @@ INSTALLED_APPS = (
     #'photologue',
     'geography',
     'floodmaps',
+    'indicative',
+    'predictive',
+    'works',
     
 )
 

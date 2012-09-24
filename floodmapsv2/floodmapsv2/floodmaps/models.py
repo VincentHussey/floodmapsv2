@@ -5,6 +5,8 @@ from geography.models import *
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^django\.contrib\.gis"])
 
+## Historic
+
 # glossary
 class GlossaryCategory(models.Model):
    name = models.CharField(max_length=50)
@@ -360,37 +362,8 @@ class FloodGroup(models.Model):
         return '%s' % (self.name)
     class Meta:
         ordering = ['type']
+        
 
-# Indicative Floods
-# indicative flood polygons
-
-
-
-# Predictive Floods
-# predictive flood polygons
-
-
-
-
-# predictive flood risk (grid?)
-
-
-
-# predictive flood depth (grid?)
-
-
-
-# predictive flood velocity (grid?)
-
-
-
-# Flood defences
-# defended areas
-
-
-
-# drainage schemes and flood relief schemes
-
-
+        
 
 
