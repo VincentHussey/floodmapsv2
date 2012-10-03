@@ -5,18 +5,18 @@ import sys
 PROJECT_ROOT = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(PROJECT_ROOT))
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
-SITE_ROOT = '/opt/floodmapsv2/' 
+SITE_ROOT = os.path.abspath('../..')
 
 #SITE_URL='http://localhost/floodmapsv2'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-LD_LIBRARY_PATH='/usr/local/lib'
-GDAL_LIBRARY_PATH = '/usr/local/lib/libgdal.so'
-GDAL_DATA = '/usr/local/share/'
-GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
-PROJ_LIB='/usr/local/share/proj'
+LD_LIBRARY_PATH='/usr/lib'
+GDAL_LIBRARY_PATH = '/usr/lib/libgdal1.6.0.so.1'
+GDAL_DATA = '/usr/share/'
+GEOS_LIBRARY_PATH = '/usr/lib/libgeos_c.so'
+PROJ_LIB='/usr/share/proj'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -139,12 +139,18 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    # GIS / GeoDjango
+    'django.contrib.gis',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'south',
     #'photologue',
-    'floodmaps',
     'geography',
+    'floodmaps',
+    'indicative',
+    'predictive',
+    'works',
+    
 )
 
 # A sample logging configuration. The only tangible logging
