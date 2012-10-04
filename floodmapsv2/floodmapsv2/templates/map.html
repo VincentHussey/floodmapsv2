@@ -11,22 +11,27 @@
     <link rel="stylesheet" type="text/css" href="/static/js/GeoExt/resources/css/geoext-all-debug.css">
     
 <script type="text/javascript">
+        var WebMercator = new OpenLayers.Projection("EPSG:900913");
+        var WGS84 = new OpenLayers.Projection("EPSG:4326");
+        var ING = new OpenLayers.Projection("EPSG:29903");
+        var ITM = new OpenLayers.Projection("EPSG:2157");
+
     Ext.onReady(function() {
+
         var map = new OpenLayers.Map();
-        var layer = new OpenLayers.Layer.WMS(
-            "Global Imagery",
-            "http://maps.opengeo.org/geowebcache/service/wms",
-            {layers: "bluemarble"}
-        );
+        var layer = new OpenLayers.Layer.OSM()
+        
         map.addLayer(layer);
 
         new GeoExt.MapPanel({
             renderTo: 'gxmap',
-            height: 400,
-            width: 600,
+            height: 800,
+            width: 1000,
             map: map,
             title: 'Map Viewer'
         });
+        
+        map.zoomToExtent(new OpenLayers.Bounds(-1200000, 6800000, -420000, 7250000)); // Web Mercator (Google / OSM projection)
     });
 </script>
 {% endblock %}
