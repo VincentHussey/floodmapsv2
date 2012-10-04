@@ -2,6 +2,14 @@ from django.contrib.gis.db import models
 
 # Create your models here.
 # PFRA
+class Status(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=255,null=True,blank=True)
+    def __unicode__(self):
+        return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']   
+        verbose_name_plural = 'status'
 
 class AreaOfSignificantPotentialRisk(models.Model):
     name = models.CharField(max_length=50)
@@ -79,6 +87,7 @@ class PredictiveFloodModel(models.Model):
     scenario = models.ForeignKey(PredictiveScenario)
     source = models.ForeignKey(PredictiveSource)
     aspr = models.ForeignKey(AreaOfSignificantPotentialRisk)
+    status = models.ForeignKey(Status,null=True,blank=True)
     # survey
     # hydrology
     # boundary_condition
@@ -93,14 +102,10 @@ class PredictiveFloodModel(models.Model):
     class Meta:
         ordering = ['name']
           
-class PredictiveFloodModelPoint(models.Model):
-    parent = models.ForeignKey(PredictiveFloodModel)    
+class PredictiveFloodNode(models.Model):
+    name = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now=True)
     modified = models.DateTimeField(auto_now=True)
-    #elevation
-    #flow
-    #velocity
-    #depth
     
     # geometry
     geometry = models.PointField(srid=2157)
@@ -109,7 +114,20 @@ class PredictiveFloodModelPoint(models.Model):
     def __unicode__(self):
         return '%s' % (self.parent)
     class Meta:
-        ordering = ['parent'] 
+        ordering = ['name']
+        
+class PredictiveFloodNodeValue(models.Model):
+    parent = models.ForeignKey(PredictiveFloodModel)
+    node = models.ForeignKey(PredictiveFloodNode)
+    elevation = models.FloatField()
+    flow = models.FloatField()
+    depth = models.FloatField()
+    velocity = models.FloatField()
+    
+    def __unicode__(self):
+        return '%s %s' % (self.parent, self.node)
+    class Meta:
+        ordering = ['node']
 
 class PredictiveFloodExtent(models.Model):
     parent = models.ForeignKey(PredictiveFloodModel)
