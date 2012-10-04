@@ -3,7 +3,7 @@ from floodmaps.admin import MyGeoAdmin
 from predictive.models import *
 
 # predictive Floods
-admin.site.register(AreaOfSignificantPotentialRisk) 
+admin.site.register(AreaOfSignificantPotentialRisk, MyGeoAdmin) 
 admin.site.register(ClimateScenario) 
 admin.site.register(AnnualExceedanceProbabilityScenario) 
 admin.site.register(PredictiveSource) 

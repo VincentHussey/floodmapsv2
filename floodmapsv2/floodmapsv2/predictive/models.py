@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 
 # Create your models here.
 # PFRA
+
 class AreaOfSignificantPotentialRisk(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
