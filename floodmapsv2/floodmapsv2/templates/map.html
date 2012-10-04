@@ -1,0 +1,40 @@
+{% extends "base_template.html" %}
+
+{% block title %}Map Viewer{% endblock %}
+{% block header %}
+    <link href="/static/detail.css" rel="stylesheet" type="text/css" >
+    <script src="/static/js/ext-3.4.0/adapter/ext/ext-base.js" type="text/javascript"></script>
+    <script src="/static/js/ext-3.4.0/ext-all.js"  type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/static/js/ext-3.4.0/resources/css/ext-all.css">
+    <script src="/static/js/OpenLayers-2.12/OpenLayers.js" type="text/javascript"></script>
+    <script src="/static/js/GeoExt/lib/GeoExt.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/static/js/GeoExt/resources/css/geoext-all-debug.css">
+    
+<script type="text/javascript">
+    Ext.onReady(function() {
+        var map = new OpenLayers.Map();
+        var layer = new OpenLayers.Layer.WMS(
+            "Global Imagery",
+            "http://maps.opengeo.org/geowebcache/service/wms",
+            {layers: "bluemarble"}
+        );
+        map.addLayer(layer);
+
+        new GeoExt.MapPanel({
+            renderTo: 'gxmap',
+            height: 400,
+            width: 600,
+            map: map,
+            title: 'Map Viewer'
+        });
+    });
+</script>
+{% endblock %}
+{% block menu-bar %}
+    {% include "header.html" %}
+    {% include "menu-bar.html" %}</div>
+{% endblock %}
+
+{% block page_body %}
+<div id="gxmap"></div>
+{% endblock %}
