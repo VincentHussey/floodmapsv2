@@ -2,4 +2,4 @@ django
 psycopg2
 south
 django-photologue
-generateDS
+#generateDS
