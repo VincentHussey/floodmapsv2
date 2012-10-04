@@ -1,0 +1,18 @@
+{% extends "base_template.html" %}
+
+{% block title %}Page unavailable{% endblock %}
+{% block header %}
+    <link href="/static/detail.css" rel="stylesheet" type="text/css" >
+{% endblock %}
+{% block menu-bar %}
+    {% include "header.html" %}
+    {% include "menu-bar.html" %}</div>
+{% endblock %}
+
+{% block page_body %}
+<h1>Page not available</h1>
+
+<p>Sorry, but the requested page could not be generated due to an issue on our server.</p>
+<a href=".">Link to current page</a>
+{% now "c"  %}
+{% endblock %}

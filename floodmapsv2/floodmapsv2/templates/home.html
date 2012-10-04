@@ -1,0 +1,36 @@
+{% extends "base_template.html" %}
+
+{% block title %}Home{% endblock %}
+{% block header %}
+    <link href="/static/detail.css" rel="stylesheet" type="text/css" >
+{% endblock %}
+{% block menu-bar %}
+    {% include "header.html" %}
+    {% include "menu-bar.html" %}</div>
+{% endblock %}
+
+{% block page_body %}
+<h1>Home</h1>
+<h2>Floods Directive</h2>
+<p>The Commissioners of Public Works have been appointed as the competent authority to implement the Floods Directive in Ireland.</p>
+
+<h3>Preliminary Flood Risk assessment (PFRA)</h3>
+<p>A Preliminary Flood Risk assessment was completed in 2011 to identify areas for further assessment under the Floods Directive.  This assessment was based on existing or readily available data.</p>
+<a href="http://localhost:5000">Viewer</a>
+
+<h3>Draft Flood Hazard maps</h3>
+The OPW, through it's consultants, is in the process of preparing draft flood hazard maps for the areas identified in the PFRA.
+
+<h3>Draft Flood Risk maps</h3>
+
+<h2>Historic floods</h2>
+<p>This section contains available information on historic floods.</p>
+
+
+<h2>Indicative floods</h2>
+<p>This section contains information on indicators of flood risk.  These are datasets which categorise the country into areas using a classification system that has a relationship with flood risk.
+</p>
+
+<h2>Flood risk and Drainage Schemes</h2>
+<p>The OPW has carried out a number of schemes in the past to improve drainage and reduce flood risk.</p>
+{% endblock %}

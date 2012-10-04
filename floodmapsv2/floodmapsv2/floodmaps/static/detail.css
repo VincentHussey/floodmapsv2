@@ -1,0 +1,60 @@
+body {
+font-family: sans-serif;
+font-size: 75%;
+align: center;
+}
+#header {
+background-color: #33CCCC;
+padding: 10px 10px 10px 10px;
+}
+img {
+border:0;
+margin:0;
+padding:0;
+}
+a, a:link, a:visited {
+color: #666;
+text-decoration: none;
+}
+a:hover, a:active {
+color:red;
+}
+a.my_highlight{color:red;}
+#data_block {
+float: right;
+width: 40%;
+padding: 10px 10px 10px 20px;
+}
+#chart_holder {
+width: 90%;
+}
+#chart {
+height: 500px;
+width: 85%;
+}
+span.datetime {
+float: left;
+}
+.Min-00, .Min-30 {
+background-color: #E0FFFF;
+}
+.odd {
+background-color: #003;
+}
+span.value {
+float: right;
+}
+#footer {
+width: 100%;
+}
+.menubar {
+display: inline-block;
+margin:2px 5px;
+padding: 5px 20px;
+background-color:#dddddd;
+}
+#menu {
+display: block;
+margin: 5px 0px;
+padding: 2px 0px;
+}
