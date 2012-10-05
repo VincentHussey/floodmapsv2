@@ -26,6 +26,7 @@ class Availability(models.Model):
         return '%s' % (self.name)
     class Meta:
         ordering = ['name']
+        verbose_name_plural = 'availability'
 
 class UnitOfManagement(models.Model):
     name = models.CharField(max_length=50)
@@ -40,6 +41,7 @@ class UnitOfManagement(models.Model):
 class AreaOfPotentialSignificantRisk(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
+    uom = models.ForeignKey(UnitOfManagement)
     created = models.DateTimeField(auto_now=True)
     modified = models.DateTimeField(auto_now=True)
     
@@ -72,6 +74,7 @@ class AnnualExceedanceProbability(models.Model):
         return '%s' % (self.name)
     class Meta:
         ordering = ['name']
+        verbose_name_plural = 'annual exceedance probabilities'
 
 class Source(models.Model):
     name = models.CharField(max_length=50)
