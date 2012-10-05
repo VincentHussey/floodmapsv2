@@ -146,7 +146,7 @@ class FloodExtent(models.Model):
     created = models.DateTimeField(auto_now=True)
     modified = models.DateTimeField(auto_now=True)
     # geometry
-    geometry = models.PolygonField(srid=2157)
+    geometry = models.MultiPolygonField(srid=2157)
     objects = models.GeoManager()
     
     # Returns the string representation of the model.
