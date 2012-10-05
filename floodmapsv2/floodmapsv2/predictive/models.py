@@ -11,7 +11,7 @@ class Status(models.Model):
         ordering = ['name']   
         verbose_name_plural = 'status'
 
-class AreaOfSignificantPotentialRisk(models.Model):
+class AreaOfPotentialSignificantRisk(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
     created = models.DateTimeField(auto_now=True)
@@ -25,7 +25,7 @@ class AreaOfSignificantPotentialRisk(models.Model):
         return '%s' % (self.name)
     class Meta:
         ordering = ['name']   
-        verbose_name_plural = 'areas of significant potential risk'
+        verbose_name_plural = 'areas of potential significant risk'
         
 # Predictive Floods
 # predictive flood polygons
@@ -86,7 +86,7 @@ class PredictiveFloodModel(models.Model):
     acronym = models.CharField(max_length=10)
     scenario = models.ForeignKey(PredictiveScenario)
     source = models.ForeignKey(PredictiveSource)
-    aspr = models.ForeignKey(AreaOfSignificantPotentialRisk)
+    aspr = models.ForeignKey(AreaOfPotentialSignificantRisk)
     status = models.ForeignKey(Status,null=True,blank=True)
     # survey
     # hydrology
