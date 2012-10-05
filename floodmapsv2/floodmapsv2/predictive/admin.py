@@ -2,15 +2,26 @@ from django.contrib.gis import admin
 from floodmaps.admin import MyGeoAdmin
 from predictive.models import *
 
+# Inlines
+class NodeValueInline(admin.TabularInline):
+    model = NodeValue
+    
+class NodeAdmin(MyGeoAdmin):
+    inlines = [NodeValue]
+
+
 # predictive Floods
-admin.site.register(AreaOfSignificantPotentialRisk, MyGeoAdmin) 
-admin.site.register(ClimateScenario)
 admin.site.register(Status)
-admin.site.register(AnnualExceedanceProbabilityScenario) 
-admin.site.register(PredictiveSource) 
-admin.site.register(PredictiveScenario) 
-admin.site.register(PredictiveUncertaintyBand) 
-admin.site.register(PredictiveFloodModel) 
-admin.site.register(PredictiveFloodNode, MyGeoAdmin) 
-admin.site.register(PredictiveFloodExtent, MyGeoAdmin) 
-admin.site.register(PredictiveFloodExtentUncertainty, MyGeoAdmin)
+admin.site.register(VersionType)
+admin.site.register(Availability)
+admin.site.register(UnitOfManagement)
+admin.site.register(AreaOfPotentialSignificantRisk, MyGeoAdmin)
+admin.site.register(Climate)
+admin.site.register(AnnualExceedanceProbability) 
+admin.site.register(Source) 
+admin.site.register(Scenario) 
+admin.site.register(UncertaintyBand) 
+admin.site.register(Node, MyGeoAdmin) 
+admin.site.register(NodeValue)
+admin.site.register(FloodExtent, MyGeoAdmin) 
+admin.site.register(Uncertainty, MyGeoAdmin)

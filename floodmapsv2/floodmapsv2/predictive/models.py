@@ -11,6 +11,32 @@ class Status(models.Model):
         ordering = ['name']   
         verbose_name_plural = 'status'
 
+class VersionType(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=255,null=True,blank=True)
+    def __unicode__(self):
+        return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
+
+class Availability(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=255,null=True,blank=True)
+    def __unicode__(self):
+        return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']
+
+class UnitOfManagement(models.Model):
+    name = models.CharField(max_length=50)
+    rbd = models.BooleanField(default=True)
+    acronym = models.CharField(max_length=10) 
+    def __unicode__(self):
+        return '%s' % (self.name)
+    class Meta:
+        ordering = ['name']   
+        verbose_name_plural = 'units of management'
+        
 class AreaOfPotentialSignificantRisk(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
@@ -27,9 +53,7 @@ class AreaOfPotentialSignificantRisk(models.Model):
         ordering = ['name']   
         verbose_name_plural = 'areas of potential significant risk'
         
-# Predictive Floods
-# predictive flood polygons
-class ClimateScenario(models.Model):
+class Climate(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
     acronym = models.CharField(max_length=10) 
@@ -39,7 +63,7 @@ class ClimateScenario(models.Model):
     class Meta:
         ordering = ['name']
 
-class AnnualExceedanceProbabilityScenario(models.Model):
+class AnnualExceedanceProbability(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
     acronym = models.CharField(max_length=10)
@@ -49,7 +73,7 @@ class AnnualExceedanceProbabilityScenario(models.Model):
     class Meta:
         ordering = ['name']
 
-class PredictiveSource(models.Model):
+class Source(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
     acronym = models.CharField(max_length=10)
@@ -59,11 +83,12 @@ class PredictiveSource(models.Model):
     class Meta:
         ordering = ['name']
 
-class PredictiveScenario(models.Model):
+class Scenario(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
-    climate_scenario = models.ForeignKey(ClimateScenario)
-    annual_exceedance_probability_scenario = models.ForeignKey(AnnualExceedanceProbabilityScenario)
+    climate = models.ForeignKey(Climate)
+    aep = models.ForeignKey(AnnualExceedanceProbability)
+    source = models.ForeignKey(Source)
     acronym = models.CharField(max_length=10)
     # Returns the string representation of the model.
     def __unicode__(self):
@@ -71,39 +96,18 @@ class PredictiveScenario(models.Model):
     class Meta:
         ordering = ['name']
 
-class PredictiveUncertaintyBand(models.Model):
+class UncertaintyBand(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
-    # Returns the string representation of the model.
-    def __unicode__(self):
-        return '%s' % (self.name)
-    class Meta:
-        ordering = ['name']
-
-class PredictiveFloodModel(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=255,null=True,blank=True)
-    acronym = models.CharField(max_length=10)
-    scenario = models.ForeignKey(PredictiveScenario)
-    source = models.ForeignKey(PredictiveSource)
-    aspr = models.ForeignKey(AreaOfPotentialSignificantRisk)
-    status = models.ForeignKey(Status,null=True,blank=True)
-    # survey
-    # hydrology
-    # boundary_condition
-    # validation
-    
-    created = models.DateTimeField(auto_now=True)
-    modified = models.DateTimeField(auto_now=True)
-    
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
     class Meta:
         ordering = ['name']
           
-class PredictiveFloodNode(models.Model):
+class Node(models.Model):
     name = models.CharField(max_length=50)
+    apsr = models.ForeignKey(AreaOfPotentialSignificantRisk)
     created = models.DateTimeField(auto_now=True)
     modified = models.DateTimeField(auto_now=True)
     
@@ -116,8 +120,8 @@ class PredictiveFloodNode(models.Model):
     class Meta:
         ordering = ['name']
         
-class PredictiveFloodNodeValue(models.Model):
-    parent = models.ForeignKey(PredictiveFloodModel)
+class NodeValue(models.Model):
+    scenario = models.ForeignKey(Scenario)
     node = models.ForeignKey(PredictiveFloodNode)
     elevation = models.FloatField()
     flow = models.FloatField()
@@ -125,13 +129,17 @@ class PredictiveFloodNodeValue(models.Model):
     velocity = models.FloatField()
     
     def __unicode__(self):
-        return '%s %s' % (self.parent, self.node)
+        return '%s %s' % (self.node, self.scenario)
     class Meta:
         ordering = ['node']
 
-class PredictiveFloodExtent(models.Model):
-    parent = models.ForeignKey(PredictiveFloodModel)
-    
+class FloodExtent(models.Model):
+    apsr = models.ForeignKey(AreaOfPotentialSignificantRisk)
+    scenario = models.ForeignKey(Scenario)
+    status = models.ForeignKey(Status)
+    version_type = models.ForeignKey(VersionType)
+    availability = models.ForeignKey(Availability)
+    # metadata
     created = models.DateTimeField(auto_now=True)
     modified = models.DateTimeField(auto_now=True)
     # geometry
@@ -140,12 +148,12 @@ class PredictiveFloodExtent(models.Model):
     
     # Returns the string representation of the model.
     def __unicode__(self):
-        return '%s' % (self.parent)
+        return '%s %s' % (self.apsr, self.scenario)
     class Meta:
-        ordering = ['parent']
+        ordering = ['apsr']
     
-class PredictiveFloodExtentUncertainty(models.Model):
-    parent = models.ForeignKey(PredictiveFloodModel)
+class Uncertainty(models.Model):
+    extent = models.ForeignKey(FloodExtent)
     uncertainty_band = models.ForeignKey(PredictiveUncertaintyBand)
     
     created = models.DateTimeField(auto_now=True)
@@ -158,8 +166,8 @@ class PredictiveFloodExtentUncertainty(models.Model):
     def __unicode__(self):
         return '%s' % (self.parent)
     class Meta:
-        ordering = ['parent']
-        verbose_name_plural = 'predictive flood extent uncertainties'
+        ordering = ['extent']
+        verbose_name_plural = 'flood extent uncertainties'
 
 # predictive flood depth (grid?)
 
