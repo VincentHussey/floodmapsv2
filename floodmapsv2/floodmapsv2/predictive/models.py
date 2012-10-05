@@ -122,7 +122,7 @@ class Node(models.Model):
         
 class NodeValue(models.Model):
     scenario = models.ForeignKey(Scenario)
-    node = models.ForeignKey(PredictiveFloodNode)
+    node = models.ForeignKey(Node)
     elevation = models.FloatField()
     flow = models.FloatField()
     depth = models.FloatField()
@@ -154,7 +154,7 @@ class FloodExtent(models.Model):
     
 class Uncertainty(models.Model):
     extent = models.ForeignKey(FloodExtent)
-    uncertainty_band = models.ForeignKey(PredictiveUncertaintyBand)
+    uncertainty_band = models.ForeignKey(UncertaintyBand)
     
     created = models.DateTimeField(auto_now=True)
     modified = models.DateTimeField(auto_now=True)
