@@ -7,6 +7,8 @@ MAP
     STATUS ON
 
     WEB
+        IMAGEPATH 
+        IMAGEURL 
         METADATA
             "wms_title"           "WMS Demo Server"
             "wms_onlineresource"  "http://192.168.2.11/cgi-bin/mapserv?map=mapserv.map&"
@@ -22,6 +24,9 @@ MAP
 #
 #  Layers
 #
+LAYER
+    
+END
 
 END
 
