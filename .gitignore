@@ -8,3 +8,6 @@ env/
 floodmapsv2/floodmapsv2/floodmaps/static/js
 
 schema/
+
+floodmapsv2/floodmapsv2/data/
+floodmapsv2/floodmapsv2/dump
