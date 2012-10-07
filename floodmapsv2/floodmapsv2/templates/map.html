@@ -11,27 +11,54 @@
     <link rel="stylesheet" type="text/css" href="/static/js/GeoExt/resources/css/geoext-all-debug.css">
     
 <script type="text/javascript">
-        var WebMercator = new OpenLayers.Projection("EPSG:900913");
+        var WebMercator = new OpenLayers.Projection("EPSG:3857");
         var WGS84 = new OpenLayers.Projection("EPSG:4326");
         var ING = new OpenLayers.Projection("EPSG:29903");
         var ITM = new OpenLayers.Projection("EPSG:2157");
+        var bounds_WM = new OpenLayers.Bounds(-1200000, 6800000, -420000, 7250000);
 
     Ext.onReady(function() {
-
-        var map = new OpenLayers.Map();
-        var layer = new OpenLayers.Layer.OSM()
+        var controls = [new OpenLayers.Control.Navigation()];
+        /*var options = {
+                numZoomLevels: 14,
+                units: 'm',
+                controls: controls,
+                maxExtent: bounds_WM,
+                resolutions: [1000,352.645,176.32242,74.0542,52.896723,35.26448,26.448362,17.632241,8.816121,3.526448,1.763224,0.881612,0.352645],
+                projection: WebMercator
+            };*/
+        var map = new OpenLayers.Map(/*options*/);
+        var layer = new OpenLayers.Layer.OSM();
+        var mapfile = '/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map';
+        //server+'/cgi-bin/mapserv?map='+mapfile,
+        var wms_server = 'http://192.168.2.4/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map';
+        var fl_1pc_aep_cs = new OpenLayers.Layer.WMS(
+            '1% AEP Fluvial', wms_server,
+            {
+                //SERVICE: 'WMS', VERSION: '1.1.1', REQUEST: 'GetMap',
+                //srs: WebMercator,
+                transparent: 'true',
+                layers: 'Flood_extents_1pc_AEP',
+                format: "image/png"
+            },
+            {isBaseLayer: 'False'}
+        );
         
-        map.addLayer(layer);
+        //map.addLayer(layer);
+        
 
         new GeoExt.MapPanel({
+            title: 'Map Viewer',
             renderTo: 'gxmap',
-            height: 800,
-            width: 1000,
+            height: 768,
+            width: 1024,
             map: map,
-            title: 'Map Viewer'
+            layers: [layer, fl_1pc_aep_cs],
+            extent: bounds_WM  //,
+            //items: [{new OpenLayers.Control.Navigation()}]
         });
         
-        map.zoomToExtent(new OpenLayers.Bounds(-1200000, 6800000, -420000, 7250000)); // Web Mercator (Google / OSM projection)
+        //map.zoomToExtent(bounds_WM); // Web Mercator (Google / OSM projection)
     });
 </script>
 {% endblock %}
