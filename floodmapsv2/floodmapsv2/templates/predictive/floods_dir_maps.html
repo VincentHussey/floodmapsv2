@@ -1,0 +1,31 @@
+{% extends "base_template.html" %}
+
+{% block title %}Floods Directive maps{% endblock %}
+{% block header %}
+    <link href="/static/detail.css" rel="stylesheet" type="text/css" >
+{% endblock %}
+{% block menu-bar %}
+    {% include "header.html" %}
+    {% include "menu-bar.html" %}</div>
+{% endblock %}
+
+{% block page_body %}
+<h1>Floods Directive</h1>
+<div class="left">
+<h2>Areas for Further Assessment (f/aka APSRs)</h2>
+{% for u in object_list %}
+<p>{{ u.name }}
+<ul>
+{% for s in u.areaofpotentialsignificantrisk_set.all %}
+<li><a href="apsr/{{s.id}}">{{s.name}}</a></li>
+{% endfor %}
+</ul>
+</p>
+{% endfor %}
+
+</div>
+<div class="right">
+
+</div>
+{% endblock %}
+

@@ -1,0 +1,74 @@
+{% extends "base_template.html" %}
+
+{% block title %}Floods Directive maps - {{ object }}{% endblock %}
+{% block header %}
+    <link href="/static/detail.css" rel="stylesheet" type="text/css" >
+    <script src="/static/js/OpenLayers-2.12/OpenLayers.js" type="text/javascript"></script>
+    <script src="/static/js/proj4js/lib/proj4js-compressed.js" type="text/javascript"></script>
+    <link href="/static/js/OpenLayers-2.12/theme/default/style.css" rel="stylesheet" type="text/css" >
+    <script type="text/javascript">
+        Proj4js.defs["EPSG:2157"] = "+proj=tmerc +lat_0=53.5 +lon_0=-8 +k=0.99982 +x_0=600000 +y_0=750000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs";
+        Proj4js.defs["EPSG:29903"] = "+proj=tmerc +lat_0=53.5 +lon_0=-8 +k=1.000035 +x_0=200000 +y_0=250000 +a=6377340.189 +b=6356034.447938534 +towgs84=482.5,-130.6,564.6,-1.042,-0.214,-0.631,8.15 +units=m +no_defs";
+        var WebMercator = new OpenLayers.Projection("EPSG:900913");
+        var WGS84 = new OpenLayers.Projection("EPSG:4326");
+        var ING = new OpenLayers.Projection("EPSG:29903");
+        var ITM = new OpenLayers.Projection("EPSG:2157");
+        var bounds_WM = new OpenLayers.Bounds(-1200000, 6800000, -420000, 7250000);
+        var controls = [
+            new OpenLayers.Control.Attribution(),
+            new OpenLayers.Control.PanZoomBar(),
+            new OpenLayers.Control.Navigation(),
+            new OpenLayers.Control.Scale(document.getElementById('scale')),
+            new OpenLayers.Control.MousePosition({displayProjection: ING,'div':OpenLayers.Util.getElement('coords')})
+            ];
+        var options = {
+                numZoomLevels: 14,
+                units: 'm',
+                controls: controls,
+                maxExtent: bounds_WM,
+                resolutions: [1000,352.645,176.32242,74.0542,52.896723,35.26448,26.448362,17.632241,8.816121,3.526448,1.763224,0.881612,0.352645],
+                projection: ITM
+            };
+        var wkt =  '{{ object.geometry.wkt|safe }}';
+        
+        var format = new OpenLayers.Format.WKT({
+            'internalProjection': WebMercator, //map.baseLayer.projection,
+            'externalProjection': ITM //new OpenLayers.Projection("EPSG:4326")
+            });
+
+        var polygonFeature= format.read(wkt);
+        
+        function init() {
+            
+            var map = new OpenLayers.Map("map",options);
+            var osm = new OpenLayers.Layer.OSM();
+            var vector = new OpenLayers.Layer.Vector("Areas for further assessment");
+            vector.addFeatures([polygonFeature]);
+            
+            map.addLayers([osm,vector]);
+            //map.zoomToExtent(bounds_WM);
+            map.zoomToExtent(polygonFeature.geometry.getBounds());
+        }
+    </script>
+{% endblock %}{% block headbody %}</head>
+<body onload="init()" >{% endblock %}
+{% block menu-bar %}
+    {% include "header.html" %}
+    {% include "menu-bar.html" %}</div>
+{% endblock %}
+
+{% block page_body %}
+<h1>Floods Directive</h1>
+<div class="left">
+<h2>Details for {{ object }}</h2>
+<p>{{ object.name }}</p>
+<div id="map" class="smallmap"  style="height:400px;width:95%;"></div><div id="scale"></div><div id="coords"></div>
+</div>
+<div class="right">
+Modelled Scenario (Status)
+{% for s in object.floodextent_set.all %}
+<li><a href="/admin/predictive/floodextent/{{s.id}}/">{{s.scenario}}</a> ({{s.status}})</li>
+{% endfor %}
+</div>
+{% endblock %}
+

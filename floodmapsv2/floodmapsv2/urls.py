@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', TemplateView.as_view(template_name="home.html")),
     url(r'^map$', TemplateView.as_view(template_name="map.html")),
-    # url(r'^floodmapsv2/', include('floodmapsv2.foo.urls')),
+    url(r'^predictive/', include('predictive.urls')),
 
     # urls for apps
     #url(r'^$',include('floodmapsv2.floodmaps.urls')),
