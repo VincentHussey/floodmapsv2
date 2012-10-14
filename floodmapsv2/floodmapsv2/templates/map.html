@@ -31,12 +31,12 @@
         var layer = new OpenLayers.Layer.OSM();
         var mapfile = '/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map';
         //server+'/cgi-bin/mapserv?map='+mapfile,
-        var wms_server = 'http://192.168.2.4/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map';
+        var wms_server = 'http://10.150.120.48/cgi-bin/mapserv?'+mapfile;
         var fl_1pc_aep_cs = new OpenLayers.Layer.WMS(
             '1% AEP Fluvial', wms_server,
             {
                 //SERVICE: 'WMS', VERSION: '1.1.1', REQUEST: 'GetMap',
-                //srs: WebMercator,
+                srs: WebMercator,
                 transparent: 'true',
                 layers: 'Flood_extents_1pc_AEP',
                 format: "image/png"

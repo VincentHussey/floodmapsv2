@@ -2,4 +2,5 @@ django
 psycopg2
 south
 django-photologue
+django-extensions
 #generateDS
