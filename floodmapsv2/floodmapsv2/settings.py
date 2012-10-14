@@ -153,6 +153,7 @@ INSTALLED_APPS = (
     'predictive',
     'works',
     'gunicorn',
+    'django_extensions',
     
 )
 
