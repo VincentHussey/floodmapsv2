@@ -68,5 +68,36 @@ LAYER
      END
    END
 END
+
+LAYER
+   CONNECTIONTYPE postgis
+   PROCESSING "CLOSE_CONNECTION=DEFER"
+
+   NAME "apsr"
+   OPACITY 50
+   # Connect to a remote spatial database
+   CONNECTION "host=localhost user=flood password=flood dbname=floodmaps"
+   # Get the polygons from the 'geometry' column of the table
+   DATA "geometry from predictive_areaofpotentialsignificantrisk USING UNIQUE id using srid = 2157"
+   # FILTER "scenario_id = 4"
+   STATUS ON
+   TYPE POLYGON
+
+   METADATA
+      "ows_enable_request"   "*"
+      "wms_title" "apsr"
+      "wms_extent" "418829.9650 511786.6808 786046.9273 964701.5937"
+      "wms_srs" "EPSG:2157 EPSG:29903 EPSG:4326 EPSG:900913 EPSG:3857"
+   END
+
+   CLASS
+     STYLE
+       OUTLINECOLOR 255 0 0  
+       WIDTH 2
+       COLOR  255 100 100 
+     END
+   END
+END
+
 END
 

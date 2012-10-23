@@ -9,6 +9,7 @@
     <script src="/static/js/OpenLayers-2.12/OpenLayers.js" type="text/javascript"></script>
     <script src="/static/js/GeoExt/lib/GeoExt.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/static/js/GeoExt/resources/css/geoext-all-debug.css">
+
     
 <script type="text/javascript">
         var WebMercator = new OpenLayers.Projection("EPSG:3857");
@@ -16,8 +17,9 @@
         var ING = new OpenLayers.Projection("EPSG:29903");
         var ITM = new OpenLayers.Projection("EPSG:2157");
         var bounds_WM = new OpenLayers.Bounds(-1200000, 6800000, -420000, 7250000);
+        var bounds_WGS84 = new OpenLayers.Bounds(-12, 53, 4, 58);
         
-        var mapPanel, tree, treeConfig, dataStore, wmsStore;
+        var mapPanel, tree, treeConfig, dataStore, wmsStore, gridPanel, mainPanel;
         
         treeConfig = [{nodeType: "gx_baselayercontainer"},
                     {nodeType: "gx_overlaylayercontainer",expanded: true}
@@ -25,6 +27,8 @@
         
 
     Ext.onReady(function() {
+        OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3;
+        OpenLayers.Util.onImageLoadErrorColor = "transparent"; 
         var controls = [new OpenLayers.Control.Navigation(), new OpenLayers.Control.PanZoomBar(),
                         new OpenLayers.Control.NavigationHistory(), new OpenLayers.Control.LayerSwitcher(),
                         new OpenLayers.Control.ScaleLine(), new OpenLayers.Control.Scale($('scale')),
@@ -32,17 +36,18 @@
                         ];
         var options = {
                 //numZoomLevels: 14,
-                units: 'm',
                 controls: controls,
-                maxExtent: bounds_WM,
+                //maxExtent: bounds_WGS84, //bounds_WM,
                 //resolutions: [1000,352.645,176.32242,74.0542,52.896723,35.26448,26.448362,17.632241,8.816121,3.526448,1.763224,0.881612,0.352645],
-                //projection: WebMercator
+                //projection: WebMercator,
+                //displayProjection: WGS84,
+                units: 'm'
             };
         var map = new OpenLayers.Map(options);
         var layer = new OpenLayers.Layer.OSM();
         var mapfile = '/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map';
         //server+'/cgi-bin/mapserv?map='+mapfile,
-        var wms_server = 'http://10.150.120.48/cgi-bin/mapserv?map='+mapfile;
+        var wms_server = 'http://192.168.2.4/cgi-bin/mapserv?map='+mapfile;
         var fl_1pc_aep_cs = new OpenLayers.Layer.WMS(
             '1% AEP Fluvial', wms_server,
             {
@@ -52,82 +57,123 @@
                 layers: 'Flood_extents_1pc_AEP',
                 format: "image/png"
             },
-            {isBaseLayer: 'false'}
+            {isBaseLayer: false}
+        );
+        
+        var apsr = new OpenLayers.Layer.WMS(
+            'APSR', wms_server,
+            {
+                //SERVICE: 'WMS', VERSION: '1.1.1', REQUEST: 'GetMap',
+                srs: WebMercator,
+                transparent: 'true',
+                layers: 'apsr',
+                format: "image/png"
+            },
+            {isBaseLayer: false}
         );
         
         //map.addLayer(layer);
+    
+    var wmsLayer = new OpenLayers.Layer.WMS(
+        "vmap0",
+        "http://vmap0.tiles.osgeo.org/wms/vmap0",
+        {layers: 'basic'}
+    );
+    
+
+    
+    // create vector layer
+    var vecLayer = new OpenLayers.Layer.Vector("vector");
+    map.addLayers([wmsLayer, layer, vecLayer, apsr, fl_1pc_aep_cs]);
+
+    // create map panel
+    mapPanel = new GeoExt.MapPanel({
+        //title: "Map Viewer",
+        region: "center",
+        height: 400,
+        width: 600,
+        map: map,
+        center: new OpenLayers.LonLat(5, 45),
+        zoom: 6
+    });
+
+    // create feature store, binding it to the vector layer
+    store = new GeoExt.data.FeatureStore({
+        layer: vecLayer,
+        fields: [
+            {name: 'name', type: 'string'},
+            {name: 'elevation', type: 'float'}
+        ],
+        proxy: new GeoExt.data.ProtocolProxy({
+            protocol: new OpenLayers.Protocol.HTTP({
+                url: "/static/summits.json",
+                format: new OpenLayers.Format.GeoJSON()
+            })
+        }),
+        autoLoad: true
+    });
+
+    // create grid panel configured with feature store
+    gridPanel = new Ext.grid.GridPanel({
+        //title: "Feature Grid",
+        region: "east",
+        store: store,
+        width: 320,
+        columns: [{
+            header: "Name",
+            width: 200,
+            dataIndex: "name"
+        }, {
+            header: "Elevation",
+            width: 100,
+            dataIndex: "elevation"
+        }],
+        sm: new GeoExt.grid.FeatureSelectionModel() 
+    });
+    
+    tree = new Ext.tree.TreePanel({
+        region: "west",
+        root: new GeoExt.tree.LayerContainer({
+            text: 'Map Layers',
+            layerStore: mapPanel.layers,
+            leaf: false,
+            expanded: true
+        }),
+        enableDD: true,
+        width: 170,
+        height: 300,
+        floating: true,
+        x: 380,
+        y: 0
+    });
+    
+    // create a panel and add the map panel and grid panel
+    // inside it
+    mainPanel = new Ext.Panel({
+        renderTo: "mainpanel",
+        layout: "border",
+        height: 600,
+        //width: 900,
+        items: [mapPanel, gridPanel, tree]
+    });
+
         
 
-        /*mapPanel = new GeoExt.MapPanel({
-            title: 'Map Viewer',
-            renderTo: 'gxmap',
-            height: 500,
-            width: 1024,
-            map: map,
-            layers: [layer, fl_1pc_aep_cs],
-            extent: bounds_WM
-        });*/
-        
-    var viewport = new Ext.Viewport({        
-        layout:'border',
-        defaults: {
-            collapsible: true,
-            split: true,
-            bodyStyle: 'padding:0px'
-        },
-        items: [{
-            region: 'north',
-            height: '60',
-            html: '',
-            cmargins: '5 0 0 0'
-        },{
-            title: 'Footer',
-            region: 'south',
-            height: 150,
-            minSize: 75,
-            maxSize: 250,
-            cmargins: '5 0 0 0'
-        },{
-            title: 'Navigation',
-            region:'west',
-            margins: '5 0 0 0',
-            cmargins: '5 5 0 0',
-            width: 175,
-            minSize: 100,
-            maxSize: 250
-        },{ region: "center",
-            id: "mappanel",
-            title: "Map",
-            xtype: "gx_mappanel",
-            map: map,
-            layers: [layer, fl_1pc_aep_cs],
-            extent: bounds_WM,
-            split: true,
-            layout: 'fit'
-            /*title: 'Main Content',
-            collapsible: false,
-            region:'center',
-            margins: '5 0 0 0'
-            id: 'map',
-            title: 'Map',
-            layout: 'fit',
-            xtype: 'mapcomponent',
-            map: map*/
-        }]}); //end viewport setup
 
-    viewport.doLayout();
-        //map.zoomToExtent(bounds_WM); // Web Mercator (Google / OSM projection)
+    map.zoomToExtent(bounds_WGS84);
         //alert(wms_server);
     });
 </script>
 {% endblock %}
 {% block menu-bar %}
     {% include "header.html" %}
-    {% include "menu-bar.html" %}</div>
+    {% include "menu-bar.html" %}
+    <span id="map_link" class="menubar"><a href="">Resize</a></span>
+    </div>
 {% endblock %}
 
 {% block page_body %}
-/*<div id="gxmap"></div>
+<div id="mainpanel"></div>
 <div id="scale"></div>
-<div id="location"></div>*/
+<div id="location"></div>
 {% endblock %}
