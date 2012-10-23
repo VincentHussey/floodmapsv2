@@ -2,6 +2,7 @@
 import os
 import django
 import sys
+
 PROJECT_ROOT = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(PROJECT_ROOT))
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
