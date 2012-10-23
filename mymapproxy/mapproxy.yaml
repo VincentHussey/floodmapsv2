@@ -33,14 +33,18 @@ layers:
   - name: osm
     title: Omniscale OSM WMS - osm.omniscale.net
     sources: [osm_cache]
-  # - name: osm_full_example
-  #   title: Omniscale OSM WMS - osm.omniscale.net
-  #   sources: [osm_cache_full_example]
+  - name: floodmapsv2
+    title: Floodmaps for Ireland
+    sources: [floodmaps_cache]
     
 caches:
   osm_cache:
     grids: [GLOBAL_MERCATOR, global_geodetic_sqrt2]
     sources: [osm_wms]
+    
+  floodmaps_cache:
+    grids: [GLOBAL_MERCATOR, global_geodetic_sqrt2, ireland_wm, ireland]
+    sources: [floodmaps_wms]
   
   # osm_cache_full_example:
   #   meta_buffer: 20
@@ -59,6 +63,17 @@ sources:
     req:
       url: http://osm.omniscale.net/proxy/service?
       layers: osm
+      
+  floodmaps_wms:
+    type: wms
+    req:
+      url: http://192.168.2.4/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map
+      layers: apsr #,Flood_extents_1pc_AEP
+      transparent: true
+      coverage:
+        bbox: [-12, 53, 4, 58]
+        bbox_srs: 'EPSG:4326'
+
 
   # overlay_full_example:
   #   type: wms
@@ -84,6 +99,17 @@ grids:
   global_geodetic_sqrt2:
     base: GLOBAL_GEODETIC
     res_factor: 'sqrt2'
+    
+  ireland:
+    srs: 'EPSG:4326'
+    bbox: [-12, 53, 4, 58]
+    bbox_srs: 'EPSG:4326'   
+    
+  ireland_wm:
+    srs: 'EPSG:3257'
+    bbox: [-12, 53, 4, 58]
+    bbox_srs: 'EPSG:4326'
+
   # grid_full_example:
   #   tile_size: [512, 512]
   #   srs: 'EPSG:900913'
