@@ -11,3 +11,4 @@ schema/
 static/
 floodmapsv2/floodmapsv2/data/
 floodmapsv2/floodmapsv2/dump
+mymapproxy/cache_data

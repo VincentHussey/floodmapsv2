@@ -62,7 +62,7 @@ LAYER
 
    CLASS
      STYLE
-       OUTLINECOLOR 187 221 255  # Blue
+       OUTLINECOLOR 0 0 255 #187 221 255  # Blue
        WIDTH 2
        COLOR  187 221 255 # Blue
      END
