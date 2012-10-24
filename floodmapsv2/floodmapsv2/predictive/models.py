@@ -138,6 +138,7 @@ class NodeValue(models.Model):
 
 class FloodExtent(models.Model):
     apsr = models.ForeignKey(AreaOfPotentialSignificantRisk)
+    apsr_m2m = models.ManyToManyField(AreaOfPotentialSignificantRisk,null=True,blank=True, related_name="apsr_m2m")
     scenario = models.ForeignKey(Scenario)
     status = models.ForeignKey(Status)
     version_type = models.ForeignKey(VersionType)
@@ -151,9 +152,9 @@ class FloodExtent(models.Model):
     
     # Returns the string representation of the model.
     def __unicode__(self):
-        return '%s %s' % (self.apsr, self.scenario)
-    class Meta:
-        ordering = ['apsr']
+        return '%s %s' % (self.status, self.scenario)
+    #class Meta:
+        #ordering = ['apsr']
     
 class Uncertainty(models.Model):
     extent = models.ForeignKey(FloodExtent)
