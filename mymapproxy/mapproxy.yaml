@@ -67,8 +67,9 @@ sources:
   floodmaps_wms:
     type: wms
     req:
-      url: http://192.168.2.4/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map
-      layers: apsr #,Flood_extents_1pc_AEP
+      #url: http://192.168.2.4/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map
+      url: http://10.150.120.48/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map
+      layers: apsr,Flood_extents_1pc_AEP
       transparent: true
       coverage:
         bbox: [-12, 53, 4, 58]
