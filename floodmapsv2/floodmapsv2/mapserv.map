@@ -61,6 +61,7 @@ LAYER
    FILTER "scenario_id = 4"
    STATUS ON
    TYPE POLYGON
+   DUMP TRUE # needed for wfs get feature
 
    METADATA
       "ows_enable_request"   "*"
@@ -98,7 +99,7 @@ LAYER
    # FILTER "scenario_id = 4"
    STATUS ON
    TYPE POLYGON
-
+   DUMP TRUE # needed for wfs get feature
    METADATA
       "ows_enable_request"   "*"
       # WMS
@@ -106,9 +107,22 @@ LAYER
       "wms_extent" "418829.9650 511786.6808 786046.9273 964701.5937"
       "wms_srs" "EPSG:2157 EPSG:29903 EPSG:4326 EPSG:900913 EPSG:3857"
       # WFS
+      ## example of GetCapabilities request
+      # http://debian/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map&service=wfs&version=1.1.0&request=GetCapabilities
+      ## example of DescribeFeatureType request
+      # http://debian/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map&service=wfs&version=1.1.0&request=DescribeFeatureType
+      ## example of GetFeature request
+      # http://debian/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map&service=wfs&version=1.1.0&request=GetFeature&TypeName=apsr
+      # http://debian/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map&service=wfs&version=1.1.0&request=GetFeature&TypeName=apsr&propertyname=(id,name,description)
+      # http://debian/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map&service=wfs&version=1.1.0&request=GetFeature&TypeName=apsr&bbox=700000,750000,710000,775000&propertyname=(id,name,description)
+
       "wfs_title"         "apsr" ##REQUIRED
-      "wfs_srs"           "EPSG:2157 EPSG:29903 EPSG:4326 EPSG:900913 EPSG:3857" ## REQUIRED
-      "gml_include_items" "all" ## Optional (serves all attributes for layer)
+      'wfs_typename'      "apsr"
+      "wfs_srs"           "EPSG:4326" # EPSG:2157 EPSG:29903 EPSG:900913 EPSG:3857" ## REQUIRED
+      "gml_include_items" "id,name,description" 
+      #"gml_include_items" "all" ## Optional (serves all attributes for layer)
+      #"gml_exclude_items" "msGeometry" # use &propertyname=(id,name,description) instead in wfs request
+
       "gml_featureid"     "ID" ## REQUIRED
       "wfs_enable_request" "*"
    END
