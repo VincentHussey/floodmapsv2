@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^map$', TemplateView.as_view(template_name="map.html")),
     url(r'^test-map$', TemplateView.as_view(template_name="test-map.html")),
     url(r'^predictive/', include('predictive.urls')),
+    url(r'^test$', TemplateView.as_view(template_name="test.html")),
 
     # urls for apps
     #url(r'^$',include('floodmapsv2.floodmaps.urls')),

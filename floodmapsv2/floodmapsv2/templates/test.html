@@ -1,0 +1,22 @@
+{% extends "base_template.html" %}
+
+{% block title %}Home{% endblock %}
+{% block header %}
+    <link href="/static/detail.css" rel="stylesheet" type="text/css" >
+{% endblock %}
+{% block menu-bar %}
+    {% include "header.html" %}
+    {% include "menu-bar.html" %}</div>
+{% endblock %}
+
+{% block page_body %}
+<div class="left">
+<p id="capabilities"><a href="/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map&
+    service=wms&request=getcapabilities&version=1.1.1">GetCapabilities</a></p>
+<p id="test_map itm"><a href="/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map&
+    service=wms&request=getmap&version=1.1.1&bbox=710865.75,750700.9375,724865.9375,756884.6875&width=800&height=800&layers=Flood_extents_1pc_AEP&style=&srs=epsg:2157&format=png">GetMap Test (ITM)</a></p>
+<p id="test_map"><a href="/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map&service=wms&request=getmap&version=1.1.1&bbox=-681441.0625,7080565.5,-677383.75,7081218.5&width=800&height=800&layers=Flood_extents_1pc_AEP&style=&srs=epsg:3857&format=png">GetMap Test (WebMercator)</a></p>
+<p id="test_legend"><a href="/cgi-bin/mapserv?map=/opt/projects/floodmapsv2/floodmapsv2/floodmapsv2/mapserv.map&SERVICE=WMS&VERSION=1.1.1&layer=apsr&REQUEST=getlegendgraphic&FORMAT=image/png">GetLegendGraphic Test (Apsr)</a></p>   
+<p id="model"><a href="/static/models_rev1.png">View Models</a></span>
+</div>
+{% endblock %}
