@@ -16,7 +16,7 @@ class LegalInstrument(models.Model):
 class Scheme(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
-    models.ForeignKey(LegalInstrument)
+    legal_instrument = models.ForeignKey(LegalInstrument)
     
     # Returns the string representation of the model.
     def __unicode__(self):
