@@ -45,17 +45,42 @@ class DefendedArea(models.Model):
         ordering = ['scheme','name']
 
 # drainage schemes and flood relief schemes
-class SchemeChannel(models.Model):
+class Channel(models.Model):
     scheme = models.ForeignKey(Scheme)
+    ref = models.CharField(max_length=50)
+    name = models.CharField(max_length=50,null=True,blank=True)
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.ref)
+    class Meta:
+        ordering = ['scheme','ref']
+        
+class ChannelSection(models.Model):
+    channel = models.ForeignKey(Channel)
     name = models.CharField(max_length=50)
+    description = models.CharField(max_length=255,null=True,blank=True)
+    # geometry
+    geometry = models.MultiLineStringField(srid=2157)
+    objects = models.GeoManager()
+    
     # Returns the string representation of the model.
     def __unicode__(self):
         return '%s' % (self.name)
     class Meta:
-        ordering = ['scheme','name']
+        ordering = ['channel','name']
         
-class SchemeChannelSection(models.Model):
-    scheme_channel = models.ForeignKey(SchemeChannel)
+class Embankment(models.Model):
+    scheme = models.ForeignKey(Scheme)
+    ref = models.CharField(max_length=50)
+    name = models.CharField(max_length=50,null=True,blank=True)
+    # Returns the string representation of the model.
+    def __unicode__(self):
+        return '%s' % (self.ref)
+    class Meta:
+        ordering = ['scheme','ref']
+        
+class EmbankmentSection(models.Model):
+    embankment = models.ForeignKey(Embankment)
     name = models.CharField(max_length=50)
     # geometry
     geometry = models.MultiLineStringField(srid=2157)
@@ -65,32 +90,11 @@ class SchemeChannelSection(models.Model):
     def __unicode__(self):
         return '%s' % (self.name)
     class Meta:
-        ordering = ['scheme_channel','name']
+        ordering = ['embankment','name']
         
-class SchemeEmbankment(models.Model):
+class BenefitingLand(models.Model):
     scheme = models.ForeignKey(Scheme)
-    name = models.CharField(max_length=50)
-    # Returns the string representation of the model.
-    def __unicode__(self):
-        return '%s' % (self.name)
-    class Meta:
-        ordering = ['scheme','name']
-        
-class SchemeEmbankmentSection(models.Model):
-    scheme_embankment = models.ForeignKey(SchemeEmbankment)
-    name = models.CharField(max_length=50)
-    # geometry
-    geometry = models.MultiLineStringField(srid=2157)
-    objects = models.GeoManager()
-    
-    # Returns the string representation of the model.
-    def __unicode__(self):
-        return '%s' % (self.name)
-    class Meta:
-        ordering = ['scheme_embankment','name']
-        
-class SchemeBenefitingLand(models.Model):
-    scheme = models.ForeignKey(Scheme)
+    drained = models.BooleanField()
     # geometry
     geometry = models.MultiPolygonField(srid=2157)
     objects = models.GeoManager()
@@ -101,10 +105,11 @@ class SchemeBenefitingLand(models.Model):
     class Meta:
         ordering = ['scheme']
         
-class SchemeBridge(models.Model):
-    scheme_channel = models.ForeignKey(SchemeChannel) # ??? Section
-    name = models.CharField(max_length=50)
-
+class Bridge(models.Model):
+    channel = models.ForeignKey(Channel) 
+    ref = models.CharField(max_length=50)
+    name = models.CharField(max_length=50,null=True,blank=True)
+    description = models.CharField(max_length=255,null=True,blank=True)
     # geometry
     geometry = models.PointField(srid=2157)
     objects = models.GeoManager()
@@ -113,11 +118,12 @@ class SchemeBridge(models.Model):
     def __unicode__(self):
         return '%s' % (self.name)
     class Meta:
-        ordering = ['scheme_channel','name']
+        ordering = ['channel','ref']
         
-class SchemeSluice(models.Model):
-    scheme_embankment = models.ForeignKey(SchemeEmbankment) # ??? Section
-    name = models.CharField(max_length=50)
+class Sluice(models.Model):
+    embankment = models.ForeignKey(Embankment)
+    ref = models.CharField(max_length=50)
+    name = models.CharField(max_length=50,null=True,blank=True)
 
     # geometry
     geometry = models.PointField(srid=2157)
@@ -127,9 +133,9 @@ class SchemeSluice(models.Model):
     def __unicode__(self):
         return '%s' % (self.name)
     class Meta:
-        ordering = ['scheme_embankment','name']
+        ordering = ['embankment','ref']
             
-class SchemePumpStation(models.Model):
+class PumpStation(models.Model):
     scheme = models.ForeignKey(Scheme)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=255,null=True,blank=True)
